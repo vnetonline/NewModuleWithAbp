@@ -5,12 +5,12 @@ In this post we will see how to develop a modular abp application. We will add a
 ## Creating the abp application and run migrations
 
 ```bash
-abp new MainApp
+abp new Amazing.Software -t -csf
 ```
 
 ## Run Migrations
 
-Change directory to src/MainApp.DbMigrator and run the migration project
+Change directory to Amazing.Software/src/Amazing.SOftware.DbMigrator and run the migration project
 
 ```bash
 dotnet run
@@ -20,23 +20,23 @@ This will apply the migrations to the db and we can run the `MainApp.Web` projec
 
 ## Add a new Module
 
-Now we will add a new module to our MainApp. Navigate to the solution folder of the `MainApp` and run the following command
+Now we will add a new module to our Amazing.Software app. Navigate to the solution folder of the `Amazing.Software` and run the following command
 
 ```bash
-abp add-module ModuleA --new --add-to-solution-file
+abp add-module Amazing.Software.ModuleA --new --add-to-solution-file
 ```
 
 This command will create a new module and add the new module to the solution.
 
-Now you can run the `MainApp.Web` and see the Api and UI available in the app.
+Now you can run the `Amazing.Software.Web` and see the Api and UI available in the app.
 
 ## Add new Entity to the ModuleA
 
-We will create a new Entity inside the `MainApp.ModuleA.Domain` called `TodoOne`.
+We will create a new Entity inside the `Amazing.Software.ModuleA.Domain` called `TodoOne`.
 
 ## 1. Create an [Entity](https://docs.abp.io/en/abp/latest/Entities)
 
-First step is to create an Entity. Create the Entity in the `MainApp.ModuleA.Domain` project.
+First step is to create an Entity. Create the Entity in the `Amazing.Software.ModuleA.Domain` project.
 
 ```cs
 public class TodoOne : Entity<Guid>
@@ -48,7 +48,7 @@ public class TodoOne : Entity<Guid>
 
 ## 2. Add Entity to [ef core](https://docs.abp.io/en/abp/latest/Entity-Framework-Core)
 
-Next is to add Entity to the EF Core. you will find the DbContext in the `MainApp.ModuleA.EntityFrameworkCore` project. Add the DbSet to the DbContext
+Next is to add Entity to the EF Core. you will find the DbContext in the `Amazing.Software.ModuleA.EntityFrameworkCore` project. Add the DbSet to the DbContext
 
 ```cs
 public DbSet<TodoOne> TodoOnes { get; set; }
@@ -56,7 +56,7 @@ public DbSet<TodoOne> TodoOnes { get; set; }
 
 ## 3. Configure Entity in [ef core](https://docs.abp.io/en/abp/latest/Entity-Framework-Core#configurebyconvention-method)
 
-Configuration is done in the `DbContextModelCreatingExtensions` class inside the `ConfigureModuleA` method. This should be available in the `MainApp.ModuleA.EntityFrameworkCore` project. `ConfigureModuleA` is invoked in the `MainAppDbContext`.
+Configuration is done in the `DbContextModelCreatingExtensions` class inside the `ConfigureModuleA` method. This should be available in the `Amazing.Software.ModuleA.EntityFrameworkCore` project. `ConfigureModuleA` is invoked in the `AmazingSoftwareDbContext`.
 
 ```cs
 builder.Entity<TodoOne>(b =>
@@ -70,7 +70,7 @@ builder.Entity<TodoOne>(b =>
 
 Now the Entity is configured we can add the migrations.
 
-Go the `MainApp.EntityFrameworkCore` project in the terminal and create migrations.
+Go the `Amazing.Software.EntityFrameworkCore` project in the terminal and create migrations.
 
 To create migration run this command:
 
@@ -88,7 +88,7 @@ dotnet ef database update
 
 ## 5. Create a Entity Dto
 
-Dto are placed in `MainApp.ModuleA.Application.Contracts` project
+Dto are placed in `Amazing.Software.ModuleA.Application.Contracts` project
 
 ```cs
 public class TodoOneDto : EntityDto<Guid>
@@ -100,7 +100,7 @@ public class TodoOneDto : EntityDto<Guid>
 
 ## 6. Map Entity to Dto
 
-Abp uses AutoMapper to map Entity to Dto. you can find the `ApplicationAutoMapperProfile` file which is used by the AutoMapper in the `MainApp.ModuleA.Application` project.
+Abp uses AutoMapper to map Entity to Dto. you can find the `ApplicationAutoMapperProfile` file which is used by the AutoMapper in the `Amazing.Software.ModuleA.Application` project.
 
 ```cs
 CreateMap<TodoOne, TodoOneDto>();
@@ -109,7 +109,7 @@ CreateMap<TodoOneDto, TodoOne>();
 
 ## 7. Create an [Application Services](https://docs.abp.io/en/abp/latest/Application-Services)
 
-Application service are created in the `MainApp.ModuleA.Application` project
+Application service are created in the `Amazing.Software.ModuleA.Application` project
 
 ```cs
 public class TodoOneAppService : ModuleAAppService
@@ -170,4 +170,4 @@ Configure<AbpAspNetCoreMvcOptions>(options =>
 
 ## 10. Test you api
 
-Run the `MainApp.Web` project and navigate to `https://localhost:<port>/swagger/` you will see the todo apis. You can test your API there.
+Run the `Amazing.Software.Web` project and navigate to `https://localhost:<port>/swagger/` you will see the todo apis. You can test your API there.
